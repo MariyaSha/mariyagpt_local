@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+psycopg[binary]
+torch
+transformers
+accelerate
+bitsandbytes
+huggingface-hub
