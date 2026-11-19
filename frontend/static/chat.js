@@ -833,7 +833,10 @@ logoutButton.addEventListener(
             await apiRequest(
                 "/api/reset",
                 {
-                    method: "POST"
+                    method: "POST",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
                 }
             );
         } finally {
