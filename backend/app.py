@@ -6,7 +6,7 @@ from datetime import datetime
 import psycopg
 import torch
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from huggingface_hub import (
@@ -1378,7 +1378,12 @@ def stream_message(
 
 
 @app.post("/api/reset")
-def reset_setup():
+def reset_setup(request: Request):
+    # A custom header requires browser preflight; CORS only trusts our frontend.
+    # Check before clearing configuration or unloading the model.
+    if request.headers.get("X-Requested-With") != "XMLHttpRequest":
+        raise HTTPException(status_code=403, detail="Reset requires an AJAX request.")
+
     runtime["name"] = None
     runtime["model"] = None
 
